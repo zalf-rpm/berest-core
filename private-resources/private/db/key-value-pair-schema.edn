@@ -1,0 +1,60 @@
+[
+
+  ;; key value pairs
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :kv/rel-dc-day
+   :db/valueType :db.type/long
+   :meta/unit "day"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A relative dc day in a key value map"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :kv/dc
+   :db/valueType :db.type/long
+   :meta/unit "1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A DC in a key value map"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :kv/name
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A name in a key value map"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :kv/extraction-depth
+   :db/valueType :db.type/long
+   :meta/unit "cm"
+   :db/cardinality :db.cardinality/one
+   :db/doc "An extraction depth [cm] in a key value map"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :kv/quotient-aet-pet
+   :db/valueType :db.type/double
+   :meta/unit "1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A quotient in a key value map"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :kv/cover-degree
+   :db/valueType :db.type/double
+   :meta/unit "1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A cover-degree in a key value map"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :kv/transpiration-factor
+   :db/valueType :db.type/double
+   :db/cardinality :db.cardinality/one
+   :db/doc "A transpiration-factor in a key value map"
+   :db.install/_attribute :db.part/db}
+
+  ]

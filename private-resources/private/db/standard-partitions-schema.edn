@@ -1,0 +1,19 @@
+[
+  ;;predefined partitions for the different parts of the application
+
+  ;system partition
+  {:db/id #db/id[:db.part/db],
+          :db/ident :berest.part/system,
+          :db.install/_partition :db.part/db}
+
+  ;climate partition
+  {:db/id #db/id[:db.part/db],
+          :db/ident :berest.part/climate,
+          :db.install/_partition :db.part/db}
+
+  ;rest-ui partition
+  {:db/id #db/id[:db.part/db],
+          :db/ident :berest.part/rest-ui,
+          :db.install/_partition :db.part/db}
+
+  ]

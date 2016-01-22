@@ -1,0 +1,33 @@
+[
+  ;; geo-coord
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+          :db/ident :geo-coord/latitude
+          :db/valueType :db.type/double
+          :db/cardinality :db.cardinality/one
+          :db/doc "A geocoords latitude"
+          :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+          :db/ident :geo-coord/longitude
+          :db/valueType :db.type/double
+          :db/cardinality :db.cardinality/one
+          :db/doc "A geocoords longitude"
+          :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+          :db/ident :geo-coord/gk5-r
+          :db/valueType :db.type/long
+          :db/cardinality :db.cardinality/one
+          :db/doc "A geocoords gauss-krueger-5 right value"
+          :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+          :db/ident :geo-coord/gk5-h
+          :db/valueType :db.type/long
+          :db/cardinality :db.cardinality/one
+          :db/doc "A geocoords gauss-krueger-5 height value"
+          :db.install/_attribute :db.part/db}
+
+  ]

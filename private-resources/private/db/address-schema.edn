@@ -1,0 +1,83 @@
+[
+
+  ;; address
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/description
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Description of address"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/street
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Street name and number etc."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/postal-code
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Postal code."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/city
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "City, town or village name"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/city-part
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Usually optional city part, or suburb name"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/municipality
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Name of regional organizational unit, usually above city level."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/municipality-short
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A municipalities short form."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/state
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "State the city and municipality is located in, highest organizational unit below country."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/state-short
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A states short form, usually a two or three letter symbol."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/country
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Country name."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :address/country-short
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A countries short name or symbol."
+   :db.install/_attribute :db.part/db}
+
+  ]

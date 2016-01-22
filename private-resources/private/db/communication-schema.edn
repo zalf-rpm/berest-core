@@ -1,0 +1,35 @@
+[
+
+ ;; communication connections
+ ;;-----------------------------------------------------------------------------------------------
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :com-con/id
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "identification for a connection, e.g. phone number, email address, IM "
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :com-con/description
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "Description of communication connection, e.g. what kind of phone number, e-mail etc. it is."
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :com-con/type
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db/doc "type of a phone number"
+  :db.install/_attribute :db.part/db}
+
+ [:db/add #db/id[:berest.part/system] :db/ident :com-con.type/mobile-phone]
+ [:db/add #db/id[:berest.part/system] :db/ident :com-con.type/fixed-phone]
+ [:db/add #db/id[:berest.part/system] :db/ident :com-con.type/fax]
+ [:db/add #db/id[:berest.part/system] :db/ident :com-con.type/skype]
+ [:db/add #db/id[:berest.part/system] :db/ident :com-con.type/email]
+ [:db/add #db/id[:berest.part/system] :db/ident :com-con.type/instant-messaging]
+ [:db/add #db/id[:berest.part/system] :db/ident :com-con.type/uri]
+
+ ]

@@ -1,0 +1,156 @@
+[
+
+  ;; crop parameters
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/id
+   :db/valueType :db.type/string
+   :db/unique :db.unique/identity
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops id, consisting of number / cultivation-type / usage"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/name
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops long name"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/description
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops description"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/number
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops number"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/cultivation-type
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops cultivation type"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/usage
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops usage"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/symbol
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops symbol"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/avg-additional-yield-per-mm-irrigation-water
+   :db/valueType :db.type/double
+   :meta/unit "kg mm-1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "Average additional yield per mm of irrigation water for the crop"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/dc-to-rel-dc-days
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "Maps a crops dc to its relative development day"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/dc-to-developmental-state-names
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "maps a crops dc to its developmental state name"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/rel-dc-day-to-cover-degrees
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "maps a crops relative dc day to the according cover-degree at that time"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/rel-dc-day-to-extraction-depths
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "maps a crops relative dc day to the according extraction depth [dm]"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/rel-dc-day-to-transpiration-factors
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "maps a crops relative dc day to the according transpiration factor"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/rel-dc-day-to-quotient-aet-pets
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "maps a crops relative dc day to the according aet/pet quotient"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop/effectivity-quotient
+   :db/valueType :db.type/double
+   :meta/unit "1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "a crops effectivity quotient"
+   :db.install/_attribute :db.part/db}
+
+  ;; cultivation types
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.cultivation-type/id
+   :db/unique :db.unique/identity
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "Id of a crops cultivation type"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.cultivation-type/description
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "Description of cultivation type"
+   :db.install/_attribute :db.part/db}
+
+  ;; usage
+
+  ;; cultivation types
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.usage/id
+   :db/unique :db.unique/identity
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "Id of a crops usage"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.usage/description
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "Description of a crops usage"
+   :db.install/_attribute :db.part/db}
+
+  ]

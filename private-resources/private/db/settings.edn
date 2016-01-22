@@ -1,0 +1,21 @@
+[
+  ;; settings
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :settings.import.dwd/at-hour
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "Hour a dwd import starts at daily"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :settings.import.dwd/at-minute
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "Minutes a dwd import starts at daily"
+   :db.install/_attribute :db.part/db}
+
+ [:db/add #db/id[:berest.part/system] :db/ident :settings.import.dwd/time]
+
+  ]

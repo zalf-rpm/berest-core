@@ -1,0 +1,60 @@
+[
+ ;; user
+ ;;-----------------------------------------------------------------------------------------------
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/id
+  :db/unique :db.unique/identity
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "A users id"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/password
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "A users password, but encrypted by scrypt key derivation function algorithm"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/full-name
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "A users full-name, might be used for display"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/roles
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db/doc "A the roles a user can play, references entities of type :user.role"
+  :db.install/_attribute :db.part/db}
+
+ [:db/add #db/id[:berest.part/system] :db/ident :user.role/admin]
+ [:db/add #db/id[:berest.part/system] :db/ident :user.role/consultant]
+ [:db/add #db/id[:berest.part/system] :db/ident :user.role/farmer]
+ [:db/add #db/id[:berest.part/system] :db/ident :user.role/guest]
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/weather-stations
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db/doc "The weather-stations from the system database available to the user"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/farms
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db/doc "The farms a user has created/knows about"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/crops
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db/doc "The crops a user has created."
+  :db.install/_attribute :db.part/db}
+
+ ]

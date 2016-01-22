@@ -1,0 +1,28 @@
+[
+
+  ;;dc-assertions
+  ;;-----------------------------------------------------------------------------------------------
+
+  #_{:db/id #db/id[:db.part/db]
+   :db/ident :assertion/at-abs-day
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "the abs-day the assertion has been made"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :assertion/assert-dc
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "asserts a dc state at a given abs-dc-day"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :assertion/abs-assert-dc-day
+   :db/valueType :db.type/long
+   :meta/unit "day"
+   :db/cardinality :db.cardinality/one
+   :db/doc "asserts a the abs-dc-day for a dc state"
+   :db.install/_attribute :db.part/db}
+
+  ]

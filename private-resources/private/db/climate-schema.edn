@@ -1,0 +1,124 @@
+[
+
+  ;; weather-station
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-station/id
+   :db/unique :db.unique/identity
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A stations human identifiable id, should be clojure like namespaced
+  e.g. dwd_F475 for Müncheberg, that way it's possible to namespace local stations
+  and if available use other stations as well"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-station/name
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A stations name"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-station/local-user-station?
+   :db/valueType :db.type/boolean
+   :db/cardinality :db.cardinality/one
+   :db/doc "Is the station a local user station, updateable by the user itself? "
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-station/geo-coord
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/one
+   :db/doc "A stations geographical coordinate"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-station/data
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "A stations actual weather data"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:berest.part/climate]
+   :db/ident :weather-station/add-data
+   :db/doc "A transaction function creating data and just allowing unique data per station and day"
+   :db/fn #db/fn {:lang "clojure"
+                  :params [db data]
+                  :code "(let [station-id (:weather-station/id data)
+                  db-part (:db-part data)
+        {date :weather-data/date
+         prognosis-date :weather-data/prognosis-date} (:weather-station/data data)
+        q (datomic.api/q '[:find ?e
+                           :in $ ?station-id ?date
+                           :where
+                           [?se :weather-station/id ?station-id]
+                           [?se :weather-station/data ?e]
+                           [?e :weather-data/date ?date]]
+                         db station-id date)
+        data-entities (->> q
+                           (map first ,,,)
+                           (map (partial datomic.api/entity db),,,))
+        data-entities* (if prognosis-date
+                         (filter #(= (:weather-data/prognosis-date %) prognosis-date) data-entities)
+                         (filter (comp not :weather-data/prognosis-date) data-entities))
+        data* (if (seq data-entities*)
+                (assoc-in data [:weather-station/data :db/id] (-> data-entities* first :db/id))
+                data)
+                data** (dissoc data* :db-part)]
+    ;always create a temporary db/id, will be upsert if station exists already
+    [(assoc data** :db/id (datomic.api/tempid (or db-part :berest.part/climate)))])"}}
+
+  ;; weather-data
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-data/date
+   :db/valueType :db.type/instant
+   :db/cardinality :db.cardinality/one
+   :db/doc "A weather data record's date"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-data/global-radiation
+   :db/valueType :db.type/double
+   :meta/unit "Jpcm2"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A weather data record's global radiation"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-data/average-temperature
+   :db/valueType :db.type/double
+   :meta/unit :degree-celsius
+   :db/cardinality :db.cardinality/one
+   :db/doc "A weather data record's average temperature"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-data/precipitation
+   :db/valueType :db.type/double
+   :meta/unit "mm"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A weather data record's precipitation"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-data/evaporation
+   :db/valueType :db.type/double
+   :meta/unit "mm"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A weather data record's turc-wendling evaporation"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :weather-data/prognosis-date
+   :db/valueType :db.type/instant
+   :db/cardinality :db.cardinality/one
+   :db/doc "The date at which the data associated with this entity have been predicted"
+   :db.install/_attribute :db.part/db}
+
+  ]

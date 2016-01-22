@@ -1,0 +1,56 @@
+[
+
+ ;;person
+ ;;-----------------------------------------------------------------------------------------------
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :person/title
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "A persons title, if any"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :person/first-name
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "A persons first name"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :person/last-name
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "A persons last name"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :person/com-connections
+  :db/valueType :db.type/ref
+  :db/isComponent true
+  :db/cardinality :db.cardinality/many
+  :db/doc "A persons communication connections"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :person/roles
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "the roles a person can play, a single free form string"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :person/is-main-contact
+  :db/valueType :db.type/boolean
+  :db/cardinality :db.cardinality/one
+  :db/doc "is the person the main contact of the farm"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :person/notes
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "Custom notes regarding a person"
+  :db.install/_attribute :db.part/db}
+
+ ]

@@ -1,0 +1,110 @@
+[
+
+  ;; plot.annual - the changing parts of a plot
+  ;;-----------------------------------------------------------------------------------------------
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :plot.annual/id
+  :db/valueType :db.type/uuid
+  :db/unique :db.unique/identity
+  :db/cardinality :db.cardinality/one
+  :db/doc "An annual plots dataset unique id"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :plot.annual/description
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "An annual plots dataset description, e.g. 2014 Tests"
+  :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/year
+   :db/valueType :db.type/long
+   :meta/unit "1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "The year the data are valid for"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/abs-day-of-initial-soil-moisture-measurement
+   :db/valueType :db.type/long
+   :meta/unit "day"
+   :db/cardinality :db.cardinality/one
+   :db/doc "The day absolute day the initial soil-moisture measurment has taken place."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/initial-soil-moistures
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "A plots initial soil-moisture as input by the user"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/initial-sm-unit
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "The unit of the soil-moisture"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/soil-moistures
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "Additional soil-moisture measurements on a plot during a year."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/technology
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/one
+   :db/doc "The parameters of the used irrigation technology on the plot"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/crop-instances
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "a list of irrigated crop-instances for this plot"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual/donations
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "a list of irrigation-donations applied on this plot this year/season"
+   :db.install/_attribute :db.part/db}
+
+  ; soil-moistures
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual.soil-moisture/abs-day-of-measurement
+   :db/valueType :db.type/long
+   :meta/unit "day"
+   :db/cardinality :db.cardinality/one
+   :db/doc "The absolute day the soil-moisture measurement has taken place."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual.soil-moisture/values
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "The values of the soil-moisture measurement as input by the user"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot.annual.soil-moisture/unit
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "The unit of the soil-moistures"
+   :db.install/_attribute :db.part/db}
+
+
+  ]

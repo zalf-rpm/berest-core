@@ -1,0 +1,147 @@
+[
+
+  ;; farm
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/id
+   :db/valueType :db.type/uuid
+   :db/unique :db.unique/identity
+   :db/cardinality :db.cardinality/one
+   :db/doc "A farms unique id"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/user-id
+   :db/valueType :db.type/string
+   :db/unique :db.unique/identity
+   :db/cardinality :db.cardinality/one
+   :db/doc "A farms unique but user referable id"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/name
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A farms name"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/avg-irrigation-costs
+   :db/valueType :db.type/double
+   :meta/unit "€ mm-1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "The average irrigation costs for this farm [€/mm]"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/addresses
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "Addresses of the farm, potentially multiple addresses, even if unlikely"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/com-connections
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "Communication connections of the farm"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/contacts
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "A farms contacts"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/contract
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/one
+   :db/doc "A farms contract"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/notes
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Custom notes regarding a farm"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/irrigation-technologies
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "The irrigation technologies available to this farm"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/plots
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "The plots which belong to a farm"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/authorative-weather-station
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "An authorative weather station associated with the farm, which applies automatically to all plots.
+  Is usually an official climate station like the german DWD climate stations and weather data will be pulled
+  from an online service automatically. These information have the lowest precedence of all weather data."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/weather-station
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "A weather station associated with the farm, which applies automatically to all plots.
+  Might be a farm local weather station. This stations data (if available) have second lowest precedence of all
+  possibly available weather data."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :farm/weather-data
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "Single weather data information which are supplied farm-wide and will apply automatically to all plots.
+  These data have highest precedence amongst the farm weather data, but can/will be overwritten by plot local weather data."
+   :db.install/_attribute :db.part/db}
+
+  ;; contract
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :contract/state
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "state of contract"
+   :db.install/_attribute :db.part/db}
+
+  [:db/add #db/id[:berest.part/system] :db/ident :contract.state/contact]
+  [:db/add #db/id[:berest.part/system] :db/ident :contract.state/consulting]
+  [:db/add #db/id[:berest.part/system] :db/ident :contract.state/repeated]
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :contract/start
+   :db/valueType :db.type/instant
+   :db/cardinality :db.cardinality/one
+   :db/doc "start of contract"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :contract/end
+   :db/valueType :db.type/instant
+   :db/cardinality :db.cardinality/one
+   :db/doc "end of contract"
+   :db.install/_attribute :db.part/db}
+
+  ]

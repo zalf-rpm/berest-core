@@ -1,0 +1,60 @@
+[
+
+  ;; crop.instance attributes
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.instance/name
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops long name"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.instance/avg-irrigation-water-need
+   :db/valueType :db.type/double
+   :meta/unit "mm"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops average irrigation water need during production"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.instance/avg-expected-additional-yield-per-ha
+   :db/valueType :db.type/double
+   :meta/unit "kg ha-1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops average expected additional yield per ha, if under irrigation"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.instance/avg-expected-additional-yield-per-mm
+   :db/valueType :db.type/double
+   :meta/unit "kg mm-1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops average expected additional yield per mm irrigation water"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.instance/avg-expected-profit-per-dt
+   :db/valueType :db.type/double
+   :meta/unit "€ dt-1"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A crops average expected profit per dt yield"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.instance/template
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "references a crop which is the template for this crop-instance"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :crop.instance/dc-assertions
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "a list of dc-assertions made for this crop-instance"
+   :db.install/_attribute :db.part/db}
+
+  ]

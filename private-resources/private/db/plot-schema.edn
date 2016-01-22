@@ -1,0 +1,224 @@
+[
+
+  ;; plot attributes. If a plot has more than one yearly entity per year, then
+  ;; this will be treated as splitted plots (sub-plots) and the yearly entities will
+  ;; have the necessary plot attributes repeated to describe the sub-plots
+  ;; e.g. id, number, description, crop-area, irrigation-area, note etc.
+  ;;-----------------------------------------------------------------------------------------------
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/id
+   :db/valueType :db.type/uuid
+   :db/unique :db.unique/identity
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots unique id"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/user-id
+   :db/valueType :db.type/string
+   :db/unique :db.unique/identity
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots unique id, e.g. the german Feldblock-ID."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/name
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots name, might be used for display purposes."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/number
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots number, for compatibility reasons to old BEREST90"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/description
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots description, e.g. Wasserloch."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/short-description
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots short description, should be restricted to maybe 140 characters."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/crop-area
+   :db/valueType :db.type/double
+   :meta/unit "m2"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots cropping area"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/irrigation-area
+   :db/valueType :db.type/double
+   :meta/unit "m2"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots irrigation area"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/stt
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots MMK Standort-Typ, e.g. D5c."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/slope
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots slope"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/field-capacities
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :meta/unit "volp"
+   :db/cardinality :db.cardinality/many
+   :db/doc "A plots original user input field capacities."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/permanent-wilting-points
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :meta/unit "volp"
+   :db/cardinality :db.cardinality/many
+   :db/doc "A plots original user input permanent wilting points."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/fc-pwp-unit
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "The unit of the field capacities and permanent wilting points"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/ka5-soil-types
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "A plots original user input KA5 soil types."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/groundwaterlevel
+   :db/valueType :db.type/long
+   :meta/unit "cm"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots groundwater-level"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/damage-compaction-depth
+   :db/valueType :db.type/long
+   :meta/unit "cm"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots damage compaction depth [cm]"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/damage-compaction-area
+   :db/valueType :db.type/double
+   :meta/unit "m2"
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots damage compaction area"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/annuals
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "The 'potentially' anually changing parts/data of the plot"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/weather-station
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "A weather station used either solely for this plot or shared by multiple plots. This stations data
+  take precedence over farm data, but have lower precedence than the ones from :plot/weather-data."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/weather-data
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "Single weather data information which are supplied for the plot only.
+  These information take precedence over anything else."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/location-coords
+   :db/valueType :db.type/ref
+   :db/isComponent true
+   :db/cardinality :db.cardinality/many
+   :db/doc "A list of geo-coords which makes up a point or polygon which describes the plots location or outline"
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/notes
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "Some custom notes for the plot."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/az-glz
+   :db/valueType :db.type/long
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots german Ackerzahl or Grünlandzahl, eg. 55."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/nft
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots MMK Neigungsflächentyp, e.g. NFT03."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/bse
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots Bodensystematische Einheit, eg. LL."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/sse
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots Substratsystematische Einheit, eg. p-sö/g-(k)el."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/bwb
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "A plots Bodenwasserbereitstellung, eg. mittel."
+   :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+   :db/ident :plot/irrigation-well
+   :db/valueType :db.type/ref
+   :db/cardinality :db.cardinality/one
+   :db/doc "A reference to the well used for this plots irrigation water."
+   :db.install/_attribute :db.part/db}
+
+
+
+  ]
