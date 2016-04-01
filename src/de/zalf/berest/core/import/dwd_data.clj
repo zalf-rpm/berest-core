@@ -169,7 +169,7 @@
 
 (def kind-pattern #"FY60DWL(A|B)-\d{8}_\d{4}.txt")
 
-(def date-pattern #"FY60DWL\w-(\d{8})_\d{4}.txt")
+(def date-pattern #"FY60DWL\w-(\d{8})_(\d{4}).txt")
 
 #_(defn make-filename [kind date & {:keys [h min] :or {h 9, min 15}}]
   (str "FY60DWL" ({:prognosis "A"
@@ -209,11 +209,12 @@
                               "A" (parse-prognosis-data data)
                               "B" (parse-measured-data data))
 
-           _ (println "transaction-data: " (pr-str transaction-data))
+           ;_ (println "transaction-data: " (pr-str transaction-data))
 
            ;insert transaction data via :weather-station/add-data transaction function, to create unique data per station and day
            transaction-data->add-data (map #(vector :weather-station/add-data %) transaction-data)
-           _ (println "transaction-data->add-data: " (pr-str transaction-data->add-data))]
+           ;_ (println "transaction-data->add-data: " (pr-str transaction-data->add-data))
+           ]
        (try
          @(d/transact (db/connection) transaction-data->add-data)
          (catch Exception e
@@ -283,9 +284,8 @@
 
 (defn start-import-scheduler
   []
-  #_(println "println starting dwd-import-scheduler")
   (reset! scheduler (qs/start (qs/initialize)))
-  #_(println "println starting dwd-import-scheduler 2")
+  (println "println starting dwd-import-scheduler")
   (log/info "starting dwd-import-scheduler")
   (let [[hour min] (first (d/q '[:find ?hour ?min
                                  :in $
@@ -293,7 +293,7 @@
                                  [?e :settings.import.dwd/at-hour ?hour]
                                  [?e :settings.import.dwd/at-minute ?min]]
                                (db/current-db)))]
-    #_(println "hour: " hour " min: " min)
+    (println "at " hour ":" min)
     (schedule-dwd-import hour min)))
 
 
@@ -301,6 +301,7 @@
   []
   (qs/delete-trigger @scheduler (qt/key dwd-import-trigger-key))
   (qs/shutdown @scheduler)
+  (println "stopping dwd-import-scheduler")
   (log/info "stopping dwd-import-scheduler"))
 
 (defn set-import-time-settings
@@ -312,10 +313,14 @@
      #_(println "hour: " hour " min: " min " tx-data: " tx-data)
      (try
        @(d/transact db-connection [tx-data])
+       (println "Updated DWD import time to: " hour ":" min " daily.
+       This will have effect upon restarting app, if rescheduling fails.")
        (log/info "Updated DWD import time to: " hour ":" min " daily.
        This will have effect upon restarting app, if rescheduling fails.")
        (qs/delete-trigger @scheduler (qt/key dwd-import-trigger-key))
        (schedule-dwd-import hour min)
+       (println "Updated scheduler for new DWD import time to: " hour ":" min " daily.")
        (log/info "Updated scheduler for new DWD import time to: " hour ":" min " daily.")
        (catch Exception e
+         (println "Couldn't update DWD import time! data: [\n" tx-data "\n]")
          (log/info "Couldn't update DWD import time! data: [\n" tx-data "\n]"))))))
