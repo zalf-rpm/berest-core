@@ -349,18 +349,18 @@
        (db/get-entities db ,,,)))
 
 #_(defn db-create-irrigation-donation
-  [datomic-connection plot-no abs-start-day abs-end-day area amount]
-  (let [plot-id (ffirst (d/q '[:find ?plot :in $ ?plot-no
-                               :where [?plot :plot/number ?plot-no]]
-                             (d/db datomic-connection) plot-no))
-        donation {:db/id (db/new-entity-id),
-                  :irrigation/abs-start-day abs-start-day
-                  :irrigation/abs-end-day abs-end-day
-                  :irrigation/area area
-                  :irrigation/amount amount}
-        plot {:db/id plot-id
-              :plot/irrigation-water-donations (db/get-entity-id donation)}]
-    (d/transact datomic-connection (flatten [donation plot]))))
+   [datomic-connection plot-no abs-start-day abs-end-day area amount]
+   (let [plot-id (ffirst (d/q '[:find ?plot :in $ ?plot-no
+                                :where [?plot :plot/number ?plot-no]]
+                              (d/db datomic-connection) plot-no))
+         donation {:db/id (db/new-entity-id),
+                   :irrigation/abs-start-day abs-start-day
+                   :irrigation/abs-end-day abs-end-day
+                   :irrigation/area area
+                   :irrigation/amount amount}
+         plot {:db/id plot-id
+               :plot/irrigation-water-donations (db/get-entity-id donation)}]
+     (d/transact datomic-connection (flatten [donation plot]))))
 
 (defn read-irrigation-donations
   [db plot-id irrigation-area]
@@ -448,19 +448,19 @@
           fcs-cm (-> (:plot/field-capacities plot)
                      (db/kv-entities->sorted-map ,,, :soil/upper-boundary-depth
                                                      :soil/field-capacity)
-                      user-input-fc-or-pwp-to-cm-layers)
+                     user-input-fc-or-pwp-to-cm-layers)
           fcs (aggregate-layers + *layer-sizes* fcs-cm)
 
           pwps-cm (-> (:plot/permanent-wilting-points plot)
                       (db/kv-entities->sorted-map ,,, :soil/upper-boundary-depth
                                                       :soil/permanent-wilting-point)
-                       user-input-fc-or-pwp-to-cm-layers)
+                      user-input-fc-or-pwp-to-cm-layers)
           pwps (aggregate-layers + *layer-sizes* pwps-cm)
 
           ka5-sts-cm (some-> (:plot/ka5-soil-types plot)
-                              (db/kv-entities->sorted-map ,,, :soil/upper-boundary-depth
-                                                              :soil/ka5-soil-type)
-                              user-input-ka5-soil-types-to-cm-layers)
+                             (db/kv-entities->sorted-map ,,, :soil/upper-boundary-depth
+                                                             :soil/ka5-soil-type)
+                             user-input-ka5-soil-types-to-cm-layers)
           ka5-sts (some->> ka5-sts-cm
                            (aggregate-layers #(conj (if (vector? %1) %1 [%1]) %2) *layer-sizes* ,,,)
                            (map #(->> %
@@ -471,7 +471,7 @@
 
           sms (->> (:plot.annual/initial-soil-moistures plot-av)
                    (#(db/kv-entities->sorted-map % :soil/upper-boundary-depth
-                                                 :soil/soil-moisture )
+                                                 :soil/soil-moisture)
                      ,,,)
                    (user-input-soil-moisture-to-cm-layers fcs-cm pwps-cm
                                                           (->> (:plot.annual/initial-sm-unit plot-av)
@@ -508,16 +508,16 @@
                      :fallow fallow)))))
 
 #_(defn db-store-initial-soil-moisture
-  [datomic-connection plot-no depths soil-moistures units]
-  (let [plot-id (ffirst (d/q '[:find ?plot :in $ ?plot-no
-                               :where [?plot :plot/number ?plot-no]]
-                             (d/db datomic-connection) plot-no))
-        entities (db/create-entities {:soil/upper-boundary-depth depths
-                                      :soil/soil-moisture soil-moistures
-                                      :soil/soil-moisture-unit units})
-        plot {:db/id plot-id
-              :plot/user-soil-data (db/get-entity-ids entities)}]
-    (d/transact datomic-connection (flatten [entities plot]))))
+   [datomic-connection plot-no depths soil-moistures units]
+   (let [plot-id (ffirst (d/q '[:find ?plot :in $ ?plot-no
+                                :where [?plot :plot/number ?plot-no]]
+                              (d/db datomic-connection) plot-no))
+         entities (db/create-entities {:soil/upper-boundary-depth depths
+                                       :soil/soil-moisture soil-moistures
+                                       :soil/soil-moisture-unit units})
+         plot {:db/id plot-id
+               :plot/user-soil-data (db/get-entity-ids entities)}]
+     (d/transact datomic-connection (flatten [entities plot]))))
 
 (defn glugla
   "Calculates the excess water in a soil-layer given the initial water content, the
@@ -967,10 +967,10 @@
         aet7pet (cond
                  (< cover-degree 1/1000) 0
                  (> pet* 1/100) (/ aet pet*)
-                 :else 1)
+                 :else 1)]
 
         ;_ (println "abs-day: " abs-day " aet7pet: " aet7pet)
-        ]
+
 
     {:abs-day abs-day
      :rel-dc-day rel-dc-day
@@ -1014,10 +1014,10 @@
                                         [m (rest ram)]))
                                     [{} am] (seq am))]
                     (into (sorted-map) am*)))
-        curves* (fmap shift-f curves)
+        curves* (fmap shift-f curves)]
         ;_ (println "curves*: ")
         ;_ (pp/pprint curves*)
-        ]
+
     (apply assoc crop (flatten (seq curves*)))))
 
 (defn dc-to-abs+rel-dc-day-from-crop-instance-dc-assertions
@@ -1048,10 +1048,10 @@
           (fmap (fn [rel-dc-day]
                   {:abs-dc-day (+ abs-dc-day* (- rel-dc-day rel-dc-day*))
                    :rel-dc-day rel-dc-day})
-                sorted-dc-to-rel-dc-days*)
+                sorted-dc-to-rel-dc-days*)]
           ;_ (println "initial: ")
           ;_ (pp/pprint sorted-initial-dc-to-abs+rel-dc-day)
-          ]
+
       (reduce (fn [[crop-instance sorted-dc-to-days] {dc* :assertion/assert-dc
                                                       abs-dc-day* :assertion/abs-assert-dc-day}]
                 (let [;get a new days pair, either from map (should be the only case) or interpolate new
@@ -1097,11 +1097,11 @@
 
                       ; also update the dc-to-rel-dc-day in the crop-instance
                       crop-instance** (assoc-in crop-instance* [:crop.instance/template :crop/dc-to-rel-dc-days]
-                                                (fmap :rel-dc-day sorted-dc-to-days**))
+                                                (fmap :rel-dc-day sorted-dc-to-days**))]
 
                       ;_ (println "crop**")
                       ;_ (pp/pprint (:crop.instance/template crop-instance**))
-                      ]
+
                   [crop-instance** sorted-dc-to-days**]))
               [crop-instance sorted-initial-dc-to-abs+rel-dc-day] (rest dc-assertions)))))
 
@@ -1112,7 +1112,7 @@
        (map (fn [crop-instance]
               (dc-to-abs+rel-dc-day-from-crop-instance-dc-assertions crop-instance)
               #_[crop-instance
-               (dc-to-abs+rel-dc-day-from-crop-instance-dc-assertions crop-instance)])
+                 (dc-to-abs+rel-dc-day-from-crop-instance-dc-assertions crop-instance)])
             ,,,)
        (into {} ,,,)))
 
@@ -1190,10 +1190,10 @@
   [fallow abs-dc-day-to-crop-instance-data abs-dc-day]
   (let [fallow* {:dc 0
                  :rel-dc-day 1
-                 :crop fallow}
+                 :crop fallow}]
 
         ;first-abs-dc-day (ffirst abs-dc-day-to-crop-instance-data)
-        ]
+
     (if-let [{dc :dc
               rel-dc-day :rel-dc-day
               {crop :crop.instance/template
@@ -1262,8 +1262,8 @@
                      " ka5-soil-types: " ka5-soil-types
                      " -> " (->> ka5-soil-types
                                  (map rr-per-soil-type ,,,)
-                                 (map (fnil identity 0.0) ,,,)))
-          ]
+                                 (map (fnil identity 0.0) ,,,)))]
+
       (->> ka5-soil-types
            (map rr-per-soil-type ,,,)
            (map (fnil identity 0.0) ,,,)))))
@@ -1280,59 +1280,59 @@
              index-localized-crop-instance-curves-by-abs-dc-day
              merge-abs-dc-day-to-crop-data-maps
              calculate-final-abs-dc-to-crop-data-map)]
-    (for [abs-day (range (ffirst sorted-weather-map) (-> sorted-weather-map rseq ffirst inc))
-          :let [weather (sorted-weather-map abs-day)]
-          :while weather]
-      (let [{:keys [dc rel-dc-day crop crop-instance]}
-            (abs-dc-day->crop-instance (:fallow plot) abs-dc-day-to-crop-instance-data abs-day)
+     (for [abs-day (range (ffirst sorted-weather-map) (-> sorted-weather-map rseq ffirst inc))
+           :let [weather (sorted-weather-map abs-day)]
+           :while weather]
+       (let [{:keys [dc rel-dc-day crop crop-instance]}
+             (abs-dc-day->crop-instance (:fallow plot) abs-dc-day-to-crop-instance-data abs-day)
 
-            prev-day-cover-degree (interpolated-value (:crop/rel-dc-day-to-cover-degrees crop)
-                                                      (dec rel-dc-day))
+             prev-day-cover-degree (interpolated-value (:crop/rel-dc-day-to-cover-degrees crop)
+                                                       (dec rel-dc-day))
 
-            cover-degree (interpolated-value (:crop/rel-dc-day-to-cover-degrees crop) rel-dc-day)
-            extraction-depth-cm (if (<= cover-degree 1/1000)
-                                  0
-                                  (int (bu/round (* 10 (interpolated-value (:crop/rel-dc-day-to-extraction-depths crop) rel-dc-day)))))
-            groundwater-level-cm (:plot/groundwaterlevel plot)
-            ]
-        {:dc dc
-         :abs-day abs-day
-         :rel-dc-day rel-dc-day
-         :crop crop
-         :crop-id (:crop/id crop)
-         :donation (donations-at donations abs-day)
-         :profit-per-dt (when crop-instance
-                          (:crop.instance/avg-expected-profit-per-dt crop-instance))
-         :avg-additional-yield-per-mm (when crop-instance
-                                        (:crop.instance/avg-expected-additional-yield-per-mm crop-instance))
-         :technology-type technology-type
-         :technology-outlet-height (or (-> plot :plot.annual/technology :technology/outlet-height) 200)
-         :technology-sprinkle-loss-factor (or (-> plot :plot.annual/technology :technology/sprinkle-loss-factor)
-                                              (if (= technology-type :technology.type/drip)
-                                                0
-                                                0.2))
-         :tavg (some-> weather :weather-data/average-temperature (bu/round ,,, :digits 1))
-         :globrad (some-> weather :weather-data/global-radiation (bu/round ,,, :digits 1))
-         :evaporation (bu/round (:weather-data/evaporation weather) :digits 1)
-         :precipitation (bu/round (:weather-data/precipitation weather) :digits 1)
-         :cover-degree cover-degree
-         :qu-target (bu/round
-                     (if (< prev-day-cover-degree 1/100)
-                       0
-                       (interpolated-value (:crop/rel-dc-day-to-quotient-aet-pets crop) rel-dc-day))
-                     :digits 3)
-         :extraction-depth-cm extraction-depth-cm
-         :transpiration-factor (interpolated-value (:crop/rel-dc-day-to-transpiration-factors crop) rel-dc-day)
-         :fcs (:plot/field-capacities plot)
-         :pwps (:plot/permanent-wilting-points plot)
-         :lambdas (or (:lambdas plot) (lambda (:lambda-without-correction plot) abs-day))
+             cover-degree (interpolated-value (:crop/rel-dc-day-to-cover-degrees crop) rel-dc-day)
+             extraction-depth-cm (if (<= cover-degree 1/1000)
+                                   0
+                                   (int (bu/round (* 10 (interpolated-value (:crop/rel-dc-day-to-extraction-depths crop) rel-dc-day)))))
+             groundwater-level-cm (:plot/groundwaterlevel plot)]
+
+         {:dc dc
+          :abs-day abs-day
+          :rel-dc-day rel-dc-day
+          :crop crop
+          :crop-id (:crop/id crop)
+          :donation (donations-at donations abs-day)
+          :profit-per-dt (when crop-instance
+                           (:crop.instance/avg-expected-profit-per-dt crop-instance))
+          :avg-additional-yield-per-mm (when crop-instance
+                                         (:crop.instance/avg-expected-additional-yield-per-mm crop-instance))
+          :technology-type technology-type
+          :technology-outlet-height (or (-> plot :plot.annual/technology :technology/outlet-height) 200)
+          :technology-sprinkle-loss-factor (or (-> plot :plot.annual/technology :technology/sprinkle-loss-factor)
+                                               (if (= technology-type :technology.type/drip)
+                                                 0
+                                                 0.2))
+          :tavg (some-> weather :weather-data/average-temperature (bu/round ,,, :digits 1))
+          :globrad (some-> weather :weather-data/global-radiation (bu/round ,,, :digits 1))
+          :evaporation (bu/round (:weather-data/evaporation weather) :digits 1)
+          :precipitation (bu/round (:weather-data/precipitation weather) :digits 1)
+          :cover-degree cover-degree
+          :qu-target (bu/round
+                      (if (< prev-day-cover-degree 1/100)
+                        0
+                        (interpolated-value (:crop/rel-dc-day-to-quotient-aet-pets crop) rel-dc-day))
+                      :digits 3)
+          :extraction-depth-cm extraction-depth-cm
+          :transpiration-factor (interpolated-value (:crop/rel-dc-day-to-transpiration-factors crop) rel-dc-day)
+          :fcs (:plot/field-capacities plot)
+          :pwps (:plot/permanent-wilting-points plot)
+          :lambdas (or (:lambdas plot) (lambda (:lambda-without-correction plot) abs-day))
          ;database values allow capillary rise rates only up to 2.7m from groundwater table to rooting zone
-         :capillary-rise-rates (when (and groundwater-level-cm
-                                          (<= (- groundwater-level-cm extraction-depth-cm) 270))
-                                 (capillary-rise-rates (:plot/ka5-soil-types plot) extraction-depth-cm))
-         :groundwater-level-cm groundwater-level-cm
-         :damage-compaction-depth-cm (resulting-damage-compaction-depth-cm plot)
-         :soil-moisture-prognosis? false})))))
+          :capillary-rise-rates (when (and groundwater-level-cm
+                                           (<= (- groundwater-level-cm extraction-depth-cm) 270))
+                                  (capillary-rise-rates (:plot/ka5-soil-types plot) extraction-depth-cm))
+          :groundwater-level-cm groundwater-level-cm
+          :damage-compaction-depth-cm (resulting-damage-compaction-depth-cm plot)
+          :soil-moisture-prognosis? false})))))
 
 (defn create-input-seq
   "create the input sequence for all the other functions"
@@ -1467,10 +1467,10 @@
         ;calculate soil-moisture in given future time without any irrigation as base value
         {qu-0-current :qu-avg-current
          qu-0-target :qu-avg-target
-         :as qu-avg} (calc-sms-with-donation 0)
+         :as qu-avg} (calc-sms-with-donation 0)]
 
         ;_ (println "irr-days: " irrigation-prognosis-days " qu-eff: " qu-eff " qu-0-current: " qu-0-current " qu-0-target: " qu-0-target)
-        ]
+
     (if (< qu-0-current qu-0-target)
       ;without irrigation we're below the target curve
       (if (< qu-eff qu-0-current)
@@ -1611,10 +1611,10 @@
 
         {qu-prognosis-avg-current :qu-avg-current
          qu-prognosis-avg-target :qu-avg-target}
-        (calc-soil-moisture-prognosis prognosis-days inputs soil-moistures)
+        (calc-soil-moisture-prognosis prognosis-days inputs soil-moistures)]
 
         ;_ (println "--> qu-prognosis-avg-current: " qu-prognosis-avg-current " qu-prognosis-avg-current: " qu-prognosis-avg-target)
-        ]
+
     (cond
      (< qu-prognosis-avg-current qu-prognosis-avg-target)
      (cond
@@ -1624,7 +1624,7 @@
 
       (>= max-boundary-donation min-boundary-donation)
       (do
-        #_(println "qu-prognosis-avg-current: " qu-prognosis-avg-current " < qu-prognosis-avg-target: " qu-prognosis-avg-target )
+        #_(println "qu-prognosis-avg-current: " qu-prognosis-avg-current " < qu-prognosis-avg-target: " qu-prognosis-avg-target)
         #_(println "technology+boundaries: " (pr-str technology+boundaries))
         (calc-donation qu-prognosis-avg-target technology+boundaries inputs soil-moistures))
 
@@ -1648,9 +1648,9 @@
                           ;_ (println "abs-day: " (:abs-day f-input))
                           {:keys [state donation] :as rec}
                           (calc-recommendation (count prognosis-inputs) slope technology
-                                               prognosis-inputs (:soil-moistures current-sm))
+                                               prognosis-inputs (:soil-moistures current-sm))]
                           ;_ (println "state: " state " recommended donation: " donation)
-                          ]
+
                       (case state
                         (:optimal-soil-moisture
                          :outside-of-irrigation-period
@@ -1668,10 +1668,10 @@
                          :optimal-donation) {:days-to-go* (:technology/cycle-days technology) #_prognosis-days
                                              :donation donation}))
                     {:days-to-go* days-to-go
-                     :donation 0})
+                     :donation 0})]
 
                   ;_ (println "days-to-go*: " (dec days-to-go*) " final donation to apply: " donation)
-                  ]
+
               #_(println "abs-day: " (:abs-day f-input)
                        " crop-id: " (:crop-id f-input)
                        " dc: " (:dc f-input)

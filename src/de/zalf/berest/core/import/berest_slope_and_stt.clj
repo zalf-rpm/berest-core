@@ -153,15 +153,15 @@
     (import-stt-data db-connection)
     (catch Exception e
       (log/info "Couldn't transact either slope, substrate group or STT data to datomic!")
-      (throw e)))
-  )
+      (throw e))))
+
 
 
 (comment
 
-  (import-berest-slope-and-stt-data (db/connection))
+  (import-berest-slope-and-stt-data (db/connection)))
 
-  )
+
 
 
 
