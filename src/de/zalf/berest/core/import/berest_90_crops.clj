@@ -114,7 +114,7 @@
 
 
 #_(def test-text
-   "
+  "
 0000,0,0,BRACHE,Brache;
 
 DC =    1;  Code
@@ -145,14 +145,14 @@ Effektivitaet  =   1;          Tag
 
   (crop-block-parser test-text)
 
-  (def ps (insta/parses crop-block-parser test-text))
+  (def ps (insta/parses crop-block-parser test-text
                         ;:total true
-
+                        ))
   (pp/pprint ps)
   (count ps)
-  (pp/pprint (nth ps 0)))
+  (pp/pprint (nth ps 0))
 
-
+  )
 
 (defn transform-crop-block [block]
   (let [trans {:double #(Double/parseDouble %)
@@ -266,9 +266,9 @@ Effektivitaet  =   1;          Tag
 
   (def crops (slurp (str "resources/private/crops/issbruecker/BBFASTD1.TXT")))
   (def crop-blocks (cs/split crops #"\s*\*\s?-\s?\*\s?\-[^\r\n]*"))
-  (pp/pprint (take 2 crop-blocks)))
+  (pp/pprint (take 2 crop-blocks))
 
-
+)
 
 (defn parse-and-transform-crop-files
   [crop-files]
@@ -309,8 +309,8 @@ Effektivitaet  =   1;          Tag
 
   (->> (parse-crop-files)
      #_(filter #(-> % second map?) ,,,)
-       pp/pprint))
-
+       pp/pprint)
+  )
 
 
 

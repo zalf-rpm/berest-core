@@ -39,10 +39,10 @@
 
   ;add some test data
   (test-data/add-zalf-test-farm :zalf)
-  (test-data/add-zalf-test-plot :zalf))
+  (test-data/add-zalf-test-plot :zalf)
 
 
-
+  )
 
 
 

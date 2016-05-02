@@ -33,16 +33,21 @@
                  [clojurewerkz/propertied "1.2.0"]
                  [clojurewerkz/quartzite "2.0.0"]]
 
+  :repositories {
+                 "my.datomic.com" {:url "https://my.datomic.com/repo"
+                                   :username "michael.berg@zalf.de"
+                                   :password "dfe713b3-62f0-469d-8ac9-07d6b02b0175"}}
+
   :profiles {:dev {:dependencies []
                    :source-paths []}}
 
   :min-lein-version "2.0.0"
 
   :source-paths ["src"]
-  :resource-paths ["resources" #_"private-resources"]
+  :resource-paths ["resources" #_"private-resources"])
 
   ;:main ^{:skip-aot true} berest.core
-  )
+
 
 
 

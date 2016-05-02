@@ -140,9 +140,9 @@
 
   (def rui (-> datomic-schema-files :berest (nth ,,, 2)))
   (def rui* ((bh/rcomp cjio/resource slurp read-string) rui))
-  (d/transact (connection "system") rui*))
+  (d/transact (connection "system") rui*)
 
-
+  )
 
 (defn new-entity-ids [in-partition] (repeatedly #(d/tempid (part in-partition))))
 (defn new-entity-id [in-partition] (first (new-entity-ids in-partition)))
@@ -150,13 +150,13 @@
 
 (defn create-entities
   ([in-partition key value kvs]
-   (map (fn [id [k v]] {:db/id id
-                        key k
-                        value v})
-        (new-entity-ids in-partition) (apply array-map kvs)))
+    (map (fn [id [k v]] {:db/id id
+                         key k
+                         value v})
+         (new-entity-ids in-partition) (apply array-map kvs)))
   ([in-partition ks-to-vss]
-   (map #(assoc (zipmap (keys ks-to-vss) %) :db/id (new-entity-id in-partition))
-        (apply map vector (vals ks-to-vss)))))
+    (map #(assoc (zipmap (keys ks-to-vss) %) :db/id (new-entity-id in-partition))
+         (apply map vector (vals ks-to-vss)))))
 
 (defn create-inline-entities
   ([key value kvs]
@@ -197,12 +197,12 @@
                [?e ?id-attr]]
              db (d/entid db attr))))
   ([db attr value]
-   (map (rcomp first (partial d/entity db))
-        (d/q '[:find ?e
-               :in $ ?attr ?value
-               :where
-               [?e ?attr ?value]]
-             db (d/entid db attr) value))))
+  (map (rcomp first (partial d/entity db))
+       (d/q '[:find ?e
+              :in $ ?attr ?value
+              :where
+              [?e ?attr ?value]]
+            db (d/entid db attr) value))))
 
 (defn create-dc-assertion*
   "Create a dc assertion for given year 'in-year' to define that at abs-dc-day
@@ -221,8 +221,8 @@
   [in-partition in-year [day month] dc & [[at-day at-month :as at]]]
   (let [abs-dc-day (bu/date-to-doy day month in-year)
         #_at-abs-day #_(if (not-any? nil? (or at [nil]))
-                        (bu/date-to-doy at-day at-month in-year)
-                        abs-dc-day)]
+                     (bu/date-to-doy at-day at-month in-year)
+                     abs-dc-day)]
     (create-dc-assertion* in-partition in-year abs-dc-day dc #_at-abs-day)))
 
 (defn create-dc-assertions
@@ -232,7 +232,7 @@
 
 
 (defn create-irrigation-donation
-  "Create datomic map for an irrigation donation given an start-abs-day
+	"Create datomic map for an irrigation donation given an start-abs-day
 	and the irrigation-donation in [mm]"
   [in-partition in-year [start-day start-month] [end-day end-month] donation-mm]
   (let [abs-start-day (bu/date-to-doy start-day start-month in-year)
@@ -342,9 +342,9 @@
 
   (store-credentials (connection) "michael" "..." "Michael Berg" [:admin :guest :farmer :consultant])
   (store-credentials (connection) "guest" "guest" "Guest Guest" [:guest])
-  (store-credentials (connection) "zalf" "..." "Zalf Zalf" [:consultant]))
+  (store-credentials (connection) "zalf" "..." "Zalf Zalf" [:consultant])
 
-
+  )
 
 
 
@@ -385,9 +385,9 @@
 
   (register-user "michael" "..." "Michael Berg" [:admin :guest :farmer :consultant])
   (register-user "guest" "guest" "Guest Guest")
-  (register-user "zalf" "..." "Zalf Zalf" [:consultant]))
+  (register-user "zalf" "..." "Zalf Zalf" [:consultant])
 
-
+  )
 
 (defn- get-user-entity
   "get the entity stored for the given user"
@@ -440,33 +440,33 @@
             (current-db))
        ffirst
        (d/entity (current-db))
-       d/touch))
+       d/touch)
 
 
-
+  )
 
 #_(defn create-session-token
-   ([user-id]
-    (create-session-token (current-db) user-id))
-   ([db user-id]
-    (if-let [enc-pwd (some->> (get-user-entity db user-id) :user/password)]
-      (sign/sign user-id enc-pwd))))
+  ([user-id]
+   (create-session-token (current-db) user-id))
+  ([db user-id]
+   (if-let [enc-pwd (some->> (get-user-entity db user-id) :user/password)]
+     (sign/sign user-id enc-pwd))))
 
 #_(defn check-session-token
-   "check if the given token is valid given the user-id and an optional timeout time
+  "check if the given token is valid given the user-id and an optional timeout time
   max-age in seconds, returns (like credentials) the user-identity if valid"
-   ([token]
-    (check-session-token (first (str/split token #":")) token nil))
-   ([user-id token]
-    (check-session-token user-id token nil))
-   ([user-id token max-age]
-    (check-session-token (current-db) user-id token max-age))
-   ([db user-id token max-age]
-    (let [user-entity (get-user-entity db user-id)
-          enc-pwd (:user/password user-entity)]
-      (when (and enc-pwd
-                 (sign/unsign token enc-pwd {:max-age (or max-age nil)}))
-        (select-keys user-entity [:user/id :user/roles :user/full-name])))))
+  ([token]
+   (check-session-token (first (str/split token #":")) token nil))
+  ([user-id token]
+   (check-session-token user-id token nil))
+  ([user-id token max-age]
+   (check-session-token (current-db) user-id token max-age))
+  ([db user-id token max-age]
+   (let [user-entity (get-user-entity db user-id)
+         enc-pwd (:user/password user-entity)]
+     (when (and enc-pwd
+                (sign/unsign token enc-pwd {:max-age (or max-age nil)}))
+       (select-keys user-entity [:user/id :user/roles :user/full-name])))))
 
 
 

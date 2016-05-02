@@ -187,12 +187,12 @@
 (defn db->crop-by-name
   "read a crop from the database by the given number and optional cultivation type and usage"
   [db number & {:keys [cultivation-type usage] :or {cultivation-type 0 usage 0}}]
-  (let [crop-e-id (ffirst (d/q '[:find ?crop-e-id]
+  (let [crop-e-id (ffirst (d/q '[:find ?crop-e-id
                               :in $ ?no ?ct ?u
                               :where
                               [?crop-e-id :crop/number ?no]
                               [?crop-e-id :crop/cultivation-type ?ct]
-                              [?crop-e-id :crop/usage ?u]
+                              [?crop-e-id :crop/usage ?u]]
                             db number cultivation-type usage))]
     (->> crop-e-id
          (db/get-entity db ,,,)
@@ -218,8 +218,8 @@
   (let [system-crops (->> (d/q '[:find ?crop-e
                                    :in $
                                    :where
-                                   [?crop-e :crop/id]
-                                 db])
+                                   [?crop-e :crop/id]]
+                                 db)
                          (map (rcomp first (partial d/entity db)) ,,,)
                          (filter (bh/rcomp :user/_crops nil?) ,,,)
                          (map #(select-keys % [:db/id :crop/id :crop/name :crop/symbol
@@ -233,31 +233,31 @@
                                :in $ ?user-id
                                :where
                                [?user-e :user/id ?user-id]
-                               [?user-e :user/crops ?crop-e]
-                               db user-id]
+                               [?user-e :user/crops ?crop-e]]
+                               db user-id)
                           (map (rcomp first (partial d/entity db)) ,,,)
                           (map #(select-keys % [:db/id :crop/id :crop/name :crop/symbol
                                                 :crop/description
                                                 :crop/number :crop/cultivation-type :crop/usage
                                                 :crop/avg-additional-yield-per-mm-irrigation-water]) ,,,)
-                          (map #(assoc % :crop-type :user) ,,,)))]
+                          (map #(assoc % :crop-type :user) ,,,))
         ;_ (println "user-crops:")
         ;_ (pp/pprint user-crops)
-
+        ]
     (->> (concat system-crops user-crops)
-         #_(map #(select-keys % [:crop-type]
+         #_(map #(select-keys % [:crop-type
                                :crop/id :crop/name :crop/symbol
                                :crop/number :crop/cultivation-type :crop/usage
-                               :crop/avg-additional-yield-per-mm-irrigation-water) ,,,)
+                               :crop/avg-additional-yield-per-mm-irrigation-water]) ,,,)
          (map #(if parent-url
                 (assoc % :url (str parent-url (:crop/id %) "/"))
                 %)
               ,,,)))
 
-  #_(->> (d/q '[:find ?crop-e]
+  #_(->> (d/q '[:find ?crop-e
               :in $
               :where
-              [?crop-e :crop/id]
+              [?crop-e :crop/id]]
             db)
        (map (rcomp first (partial d/entity db)) ,,,)
        (map #(select-keys % [:crop/id :crop/name :crop/symbol
@@ -407,7 +407,7 @@
                                              :plot.annual/id
                                              #_:plot.annual/dc-assertions
                                              #_:plot.annual/abs-day-of-initial-soil-moisture-measurement
-                                             #_:plot.annual/initial-soil-moistures:plot.annual/soil-moistures
+                                             #_:plot.annual/initial-soil-moistures
                                              :plot.annual/soil-moistures))
 
         ;_ (println "copy-of-annual-data*:")
@@ -474,8 +474,8 @@
                   entity-attr value
                   inv-entity-attr (case id-attr
                                     :db/id id
-                                    [id-attr id])}]]
-
+                                    [id-attr id])}]
+        ]
     (try
       @(d/transact db-connection tx-data)
       (catch Exception e
@@ -602,17 +602,17 @@
       @(d/transact db-connection tx-data)
       (catch Exception e
         (log/info "Couldn't create a new crop! tx-data:\n" tx-data)
-        (throw e))))
+        (throw e)))))
 
-  (defn create-new-crop-kv-pair)
+  (defn create-new-crop-kv-pair
   [db-connection user-id crop-id crop-attr key-attr key-value value-attr value-value]
   (let [db (d/db db-connection)
         tx-data [{:db/id (db/new-entity-id user-id)
                   (d/entid db key-attr) key-value
                   (d/entid db value-attr) value-value
-                  (keyword (namespace crop-attr) (str "_" (name crop-attr))) [:crop/id crop-id]}]]
+                  (keyword (namespace crop-attr) (str "_" (name crop-attr))) [:crop/id crop-id]}]
         ;_ (println "tx-data: " (pr-str tx-data))
-
+        ]
     (try
       @(d/transact db-connection tx-data)
       (catch Exception e
@@ -659,8 +659,8 @@
                      [?sg-e :soil.substrate/key ?sg-key]
                      [?sg-e :soil.substrate/field-capacities ?fc-e]
                      [?fc-e :soil/upper-boundary-depth ?fc-depth]
-                     [?fc-e :soil/field-capacity ?fc]
-                   db substrate-group-key])
+                     [?fc-e :soil/field-capacity ?fc]]
+                   db substrate-group-key)
           pwps (d/q '[:find ?pwp-depth ?pwp
                       :in $ ?sg-key
                       :where
@@ -694,15 +694,15 @@
 
 
 
-#_()
+#_(
   (:volP :pFK :pNFK) [(partial expand-layers (max-soil-depth))
                       (soil-moisture-unit {:pFK #(pFK->mm7x %1 %3)
                                            :pNFK pNFK->mm7x
                                            :volP #(-> %3
                                                       volp->mm7dm
-                                                      mm7dm->mm7cm)})]
+                                                      mm7dm->mm7cm)})])
 
-#_(defn update-fc-pwp-unit)
+#_(defn update-fc-pwp-unit
   [db db-connection user-id plot-id new-fc-pwp-unit]
   (let [old-fc-pwp-unit (first (d/q '[:find ?unit
                                       :in $ ?plot-id
@@ -745,4 +745,4 @@
       @(d/transact db-connection tx-data)
       (catch Exception e
         (log/info "Couldn't set/copy substrate group's fcs and pwps to plot!  tx-data:\n" tx-data)
-        (throw e))))
+        (throw e)))))
