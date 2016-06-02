@@ -60,7 +60,7 @@
 
         filter-measured-data (fn [measured-doy doy-2-data-seq]
                                (filter (fn [[doy v]] (and (not (:weather-data/prognosis-date v))
-                                                          (<= doy (+ measured-doy prognosis-days) #_measured-doy)))
+                                                          (<= doy (+ measured-doy prognosis-days))))
                                        doy-2-data-seq))
 
         filter-prognosis-data (fn [measured-doy doy-2-data-seq]
