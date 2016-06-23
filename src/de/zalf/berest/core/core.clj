@@ -816,7 +816,7 @@
   #_(println "calc-soil-moisture* input: " (pr-str input))
   (let [drip-donation (when (= technology-type :technology.type/drip)
                         donation)
-         soil-moistures* (if drip-donation
+        soil-moistures* (if drip-donation
                           (map (fn [sm depth]
                                  (if (<= technology-outlet-height depth)
                                    (+ sm drip-donation)
@@ -825,10 +825,10 @@
                           soil-moistures)
 
         #__ #_(println "daily-precip: " daily-precipitation-and-donation
-                   " soil-moistures: " soil-moistures*
-                   " capillary-rise-rates: " capillary-rise-rates)
+                       " soil-moistures: " soil-moistures*
+                       " capillary-rise-rates: " capillary-rise-rates)
 
-         sms+surface-water (concat [(+ daily-precipitation-and-donation (first soil-moistures*))]
+        sms+surface-water (concat [(+ daily-precipitation-and-donation (first soil-moistures*))]
                                   (rest soil-moistures*))
 
         ;for at least partly uncovered ground
@@ -840,6 +840,8 @@
                (aggregate-layers + *layer-sizes* ,,,)
                (bu/dot-mult (uncovered-water-abstraction-reduction-factors fcs pwps sms+surface-water) ,,,)
                (bu/s-mult evaporation ,,,)))
+
+        ;_ (println "abs-day: " abs-day " uncovered-water-abstractions: " uncovered-water-abstractions)
 
         ;for at least partly covered ground
         [aet, water-abstractions]
@@ -930,7 +932,8 @@
            cover-degree qu-target
            transpiration-factor]
     :as input}]
-  #_(println "evap: " evaporation
+  #_(println "abs-day: " abs-day
+           " evap: " evaporation
            " precip: " precipitation
            " donation: " donation
            " technology-sprinkle-loss-factor: " technology-sprinkle-loss-factor

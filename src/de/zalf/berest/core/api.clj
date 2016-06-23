@@ -151,7 +151,7 @@
                                       donations :technology.type/sprinkler)
           ;first-doy (-> inputs first :abs-day)
           last-doy (-> inputs last :abs-day)
-          available-prognosis-days (- last-doy calculation-doy)
+          available-prognosis-days (inc (- last-doy calculation-doy))
           inputs-x (if (> last-doy calculation-doy)
                      (drop-last available-prognosis-days inputs)
                      inputs)
@@ -169,12 +169,17 @@
            :as sms-x} (last measured-sms*)
           ;(bc/calc-soil-moistures inputs-7 (:plot.annual/initial-soil-moistures plot))
 
+          ;_ (println "measured-sms*: " (take 5 measured-sms*))
+
           prognosis-sms* (when prognosis-inputs
                            (bc/calc-soil-moisture-prognosis* available-prognosis-days prognosis-inputs measured-sms))
           ;prognosis-sms (last prognosis-sms*)
-          #_(bc/calc-soil-moisture-prognosis 7 prognosis-inputs soil-moistures-7)]
+          #_(bc/calc-soil-moisture-prognosis 7 prognosis-inputs soil-moistures-7)
+
+          ;_ (println "prognosis-sms*: " prognosis-sms*)
+          ]
       {:inputs inputs
-       :soil-moistures (concat (rest measured-sms*) prognosis-sms*)})))
+       :soil-moistures (concat measured-sms* #_(rest measured-sms*) prognosis-sms*)})))
 
 
 (defn simulate-plot-from-db

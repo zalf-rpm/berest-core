@@ -16,6 +16,7 @@
 
 (def ^:dynamic *db-id* "berest")
 
+
 (def partition-namespace #(str *db-id* ".part"))
 
 (defn part
