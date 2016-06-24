@@ -1148,13 +1148,14 @@
   "calculate order given a list of merged abs-dc-day-to-crop-data"
   [merged-abs-dc-day-to-crop-data-maps]
   (->> merged-abs-dc-day-to-crop-data-maps
-       (reduce (fn [{:keys [m last-crop-instance crop-canceled?]}
+       (reduce (fn [{:keys [m last-crop-instance crop-canceled? canceled-crops]}
                     [abs-dc-day data-map?s]]
                  (let [v? (vector? data-map?s)
                        lci (if last-crop-instance
                              last-crop-instance
                              ;if is vector simply take first crop-instance, other decision could be implemented
-                             (:crop-instance ((if v? first identity) data-map?s)))]
+                             (:crop-instance ((if v? first identity) data-map?s)))
+											 ci (:crop-instance data-map?s)]
                    (if v?
                      ;we got a cancelation of the current crop, but have to decide which
                      ;to choose now
@@ -1168,18 +1169,24 @@
                           ;create accumulator for next reduce call
                           (#(hash-map :m %
                                       :last-crop-instance (:crop.instance %)
-                                      :crop-canceled? true) ,,,))
+																			:canceled-crops (conj canceled-crops lci)) ,,,))
                      ;ignore crop/crop-data if its from previous crop
                      ;and only if crop has been canceled before by other crop
-                     {:m (if (or (= lci (:crop-instance data-map?s))
-                                 (not crop-canceled?))
-                           (assoc m abs-dc-day data-map?s)
-                           m)
-                      :last-crop-instance lci
-                      :crop-canceled? crop-canceled?})))
-               {:m (sorted-map)
-                :last-crop-instance nil
-                :crop-canceled? false} ,,,)
+										 (if (= lci ci)
+											 {:m (assoc m abs-dc-day data-map?s)
+												:last-crop-instance lci
+												:canceled-crops canceled-crops}
+											 (if (canceled-crops ci)
+												 {:m m
+													:last-crop-instance lci
+													:canceled-crops canceled-crops}
+												 {:m (assoc m abs-dc-day data-map?s)
+													:last-crop-instance ci
+													:canceled-crops (conj canceled-crops lci)})))))
+							 {:m (sorted-map)
+								:last-crop-instance nil
+								:crop-canceled? false
+								:canceled-crops #{}} ,,,)
        :m))
 
 (defn abs-dc-day->crop-instance
@@ -1278,11 +1285,16 @@
   [plot sorted-weather-map donations technology-type]
   (when (some-> sorted-weather-map seq)
     (let [abs-dc-day-to-crop-instance-data
-          (->> (:plot.annual/crop-instances plot)
-             dc-to-abs+rel-dc-day-from-plot-dc-assertions
-             index-localized-crop-instance-curves-by-abs-dc-day
-             merge-abs-dc-day-to-crop-data-maps
-             calculate-final-abs-dc-to-crop-data-map)]
+					(->> (:plot.annual/crop-instances plot)
+							 #_(#(do (pp/pprint %) (println "after (:plot.annual/crop-instances plot)") %),,,)
+							 dc-to-abs+rel-dc-day-from-plot-dc-assertions
+							 #_(#(do (pp/pprint %) (println "after dc-to-abs+rel-dc-day-from-plot-dc-assertions") %),,,)
+							 index-localized-crop-instance-curves-by-abs-dc-day
+							 #_(#(do (pp/pprint %) (println "after index-localized-crop-instance-curves-by-abs-dc-day") %),,,)
+							 merge-abs-dc-day-to-crop-data-maps
+							 #_(#(do (pp/pprint %) (println "after merge-abs-dc-day-to-crop-data-maps") %),,,)
+							 calculate-final-abs-dc-to-crop-data-map
+							 #_(#(do (pp/pprint %) (println "after calculate-final-abs-dc-to-crop-data-map") %),,,))]
     (for [abs-day (range (ffirst sorted-weather-map) (-> sorted-weather-map rseq ffirst inc))
           :let [weather (sorted-weather-map abs-day)]
           :while weather]
