@@ -148,38 +148,42 @@
           ;_ (pp/pprint sorted-weather-map)
 
           inputs (bc/create-input-seq plot sorted-weather-map (+ measured-doy prognosis-days)
-                                      donations :technology.type/sprinkler)
-          ;first-doy (-> inputs first :abs-day)
-          last-doy (-> inputs last :abs-day)
-          available-prognosis-days (inc (- last-doy calculation-doy))
-          inputs-x (if (> last-doy calculation-doy)
-                     (drop-last available-prognosis-days inputs)
-                     inputs)
+                                      donations :technology.type/sprinkler)]
 
-          ;xxx (map (rcomp (juxt :abs-day :irrigation-amount) str) inputs-x)
-          ;_ (println "xxx: " xxx)
+      (if (seq inputs)
+        (let [;first-doy (-> inputs first :abs-day)
+              last-doy (-> inputs last :abs-day)
+              available-prognosis-days (inc (- last-doy calculation-doy))
+              inputs-x (if (> last-doy calculation-doy)
+                         (drop-last available-prognosis-days inputs)
+                         inputs)
 
-          prognosis-inputs (when (> last-doy calculation-doy)
-                             (take-last available-prognosis-days inputs))
-          ;_ (println "prognosis-inputs: " (pr-str prognosis-inputs))
-          ;days (range (-> inputs first :abs-day) (+ calculation-doy prognosis-days 1))
+              ;xxx (map (rcomp (juxt :abs-day :irrigation-amount) str) inputs-x)
+              ;_ (println "xxx: " xxx)
 
-          measured-sms* (bc/calc-soil-moistures* inputs-x (:plot.annual/initial-soil-moistures plot))
-          {measured-sms :soil-moistures
-           :as sms-x} (last measured-sms*)
-          ;(bc/calc-soil-moistures inputs-7 (:plot.annual/initial-soil-moistures plot))
+              prognosis-inputs (when (> last-doy calculation-doy)
+                                 (take-last available-prognosis-days inputs))
+              ;_ (println "prognosis-inputs: " (pr-str prognosis-inputs))
+              ;days (range (-> inputs first :abs-day) (+ calculation-doy prognosis-days 1))
 
-          ;_ (println "measured-sms*: " (take 5 measured-sms*))
+              measured-sms* (bc/calc-soil-moistures* inputs-x (:plot.annual/initial-soil-moistures plot))
+              {measured-sms :soil-moistures
+               :as sms-x} (last measured-sms*)
+              ;(bc/calc-soil-moistures inputs-7 (:plot.annual/initial-soil-moistures plot))
 
-          prognosis-sms* (when prognosis-inputs
-                           (bc/calc-soil-moisture-prognosis* available-prognosis-days prognosis-inputs measured-sms))
-          ;prognosis-sms (last prognosis-sms*)
-          #_(bc/calc-soil-moisture-prognosis 7 prognosis-inputs soil-moistures-7)
+              ;_ (println "measured-sms*: " (take 5 measured-sms*))
+
+              prognosis-sms* (when prognosis-inputs
+                               (bc/calc-soil-moisture-prognosis* available-prognosis-days prognosis-inputs measured-sms))
+              ;prognosis-sms (last prognosis-sms*)
+              #_(bc/calc-soil-moisture-prognosis 7 prognosis-inputs soil-moistures-7)]
 
           ;_ (println "prognosis-sms*: " prognosis-sms*)
-          ]
-      {:inputs inputs
-       :soil-moistures (concat measured-sms* #_(rest measured-sms*) prognosis-sms*)})))
+
+          {:inputs inputs
+           :soil-moistures (concat measured-sms* #_(rest measured-sms*) prognosis-sms*)})
+        {:inputs []
+         :soil-moistures []}))))
 
 
 (defn simulate-plot-from-db
