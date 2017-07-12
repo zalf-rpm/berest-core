@@ -1,5 +1,5 @@
 (defproject
-  de.zalf.berest/berest-core "0.2.1"
+  de.zalf.berest/berest-core "0.2.2"
   :description "BEREST core"
   :url ""
   :license {:name "Eclipse Public License"

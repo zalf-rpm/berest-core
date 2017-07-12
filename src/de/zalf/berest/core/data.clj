@@ -338,7 +338,7 @@
 (defn db->donations
   [db plot-id plot-annual-id]
   (->> (d/q '[:find ?donation-e
-              :in $ ?plot-id ?year
+              :in $ ?plot-id ?plot-annual-id
               :where
               [?plot-e :plot/id ?plot-id]
               [?plot-e :plot/annuals ?pa-e]
