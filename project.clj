@@ -1,13 +1,12 @@
 (defproject
-  de.zalf.berest/berest-core "0.2.2"
+  de.zalf.berest/berest-core "0.2.3"
   :description "BEREST core"
   :url ""
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.7.0"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
 
-                 [com.datomic/datomic-pro "0.9.5344" :exclusions [joda-time]]
-                 [com.amazonaws/aws-java-sdk-dynamodb "1.9.39" :exclusions [joda-time]]
+                 [com.datomic/datomic-free "0.9.5697" :exclusions [joda-time]]
 
                  #_[buddy "0.1.0-beta4"]
                  [crypto-password "0.1.3"]
@@ -33,10 +32,6 @@
                  [clojurewerkz/propertied "1.2.0"]
                  [clojurewerkz/quartzite "2.0.0"]]
 
-  :repositories {
-                 "my.datomic.com" {:url "https://my.datomic.com/repo"
-                                   :username "michael.berg@zalf.de"
-                                   :password "dfe713b3-62f0-469d-8ac9-07d6b02b0175"}}
 
   :profiles {:dev {:dependencies []
                    :source-paths []}}
