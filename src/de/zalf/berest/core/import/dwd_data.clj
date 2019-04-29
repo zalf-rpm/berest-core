@@ -56,7 +56,8 @@
   "parse ad DWD measured data file and return ready datomic transaction data"
   [data]
   (let [data* (str/split-lines data)
-        data** (->> data* (drop 6 ,,,) (take 3))
+        ;data** (->> data* (drop 6 ,,,) (take 3))
+        data** (->> data* (drop-while #(not (str/starts-with? % "Datum")) ,,,) (take 3))
         stations (-> data** first (str/split ,,, #"\s+"))]
     (for [line (drop 2 data**)
           :let [line* (str/split line #"\s+")
