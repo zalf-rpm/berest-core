@@ -23,7 +23,8 @@
   "parse a DWD prognosis data file and return datomic transaction data"
   [data]
   (let [data* (str/split-lines data)
-        data** (->> data* (drop 7 ,,,) (take 9))
+        ;data** (->> data* (drop 7 ,,,) (take 9))
+        data** (->> data* (drop-while #(not (str/starts-with? % "Kennung")) ,,,) (take 9))
         stations (-> data** first (str/split ,,, #"\s+"))
         prognosis-date (atom nil)]
     (for [line (drop 3 data**)
