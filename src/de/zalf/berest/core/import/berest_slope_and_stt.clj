@@ -1,7 +1,6 @@
 (ns de.zalf.berest.core.import.berest-slope-and-stt
   (:require [datomic.api :as d]
             [de.zalf.berest.core.datomic :as db]
-            [clojure.string :as cs]
             [clojure.tools.logging :as log]))
 
 (defn create-slope-entity

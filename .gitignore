@@ -12,4 +12,8 @@ pom.xml.asc
 .nrepl-port
 
 berest-core.iml
-/.idea
+.idea
+.clj-kondo
+.lsp
+.cpcache
+.calva

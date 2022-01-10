@@ -1,6 +1,5 @@
 (ns de.zalf.berest.core.init-db
-  (:require [datomic.api :as d]
-            [clj-time.core :as date]
+  (:require [clj-time.core :as date]
             [de.zalf.berest.core.datomic :as db]
             [de.zalf.berest.core.import.zalf-climate-data :as climate-import]
             [de.zalf.berest.core.import.dwd-data :as dwd]

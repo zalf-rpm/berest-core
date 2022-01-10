@@ -1,10 +1,7 @@
 (ns de.zalf.berest.core.import.ka5-capillary-rise-rates
   (:require [datomic.api :as d]
             [de.zalf.berest.core.datomic :as db]
-            [instaparse.core :as insta]
             [clojure.java.io :as cjio]
-            [clojure.pprint :as pp]
-            [clojure.string :as cs]
             [clojure.tools.logging :as log]
             [clojure-csv.core :as csv]))
 

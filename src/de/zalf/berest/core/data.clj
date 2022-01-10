@@ -1,12 +1,9 @@
 (ns de.zalf.berest.core.data
   (:import [java.util Calendar])
   (:require [de.zalf.berest.core.datomic :as db]
-            [clj-time.core :as ctc]
-            [clojure.set :as set]
             [de.zalf.berest.core.helper :as bh :refer [rcomp]]
             [datomic.api :as d]
             [clojure.tools.logging :as log]
-            [clojure.pprint :as pp]
             [clojure.string :as cs]))
 
 (defn entity-map->map [val]

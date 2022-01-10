@@ -1,10 +1,4 @@
-(ns de.zalf.berest.core.import.municipalities
-	(:require [datomic.api :as d]
-            [clj-time.core :as ctc]
-            [de.zalf.berest.core.datomic :as db]
-            [de.zalf.berest.core.core :as bc]
-            [de.zalf.berest.core.util :as bu]
-            [de.zalf.berest.core.helper :as bh]))
+(ns de.zalf.berest.core.import.municipalities)
 
 (def countries
   {:de "Bundesrepublik Deutschland"

@@ -1,11 +1,6 @@
 (ns de.zalf.berest.core.queries
-  (:require [clojure.string :as cs]
-            [clojure.edn :as edn]
-            [datomic.api :as d]
-            [de.zalf.berest.core.datomic :as db]))
-
-
-
+  (:require [clojure.edn :as edn]
+            [datomic.api :as d]))
 
 (defmulti string->value* (fn [db-type _] db-type))
 

@@ -1,14 +1,11 @@
 (ns de.zalf.berest.core.import.zalf-climate-data
   (:require [clojure.java.io :as cjio]
-            [clojure.string :as str]
-            [clj-time.core :as ctc]
             [clj-time.format :as ctf]
             [clj-time.coerce :as ctcoe]
             [de.zalf.berest.core.climate.algo :as algo]
             [de.zalf.berest.core.datomic :as db]
             [de.zalf.berest.core.util :as bu]
             [datomic.api :as d]
-            [clojure.pprint :as pp]
             [clojure.tools.logging :as log]
             [clojure-csv.core :as csv]))
 

@@ -14,9 +14,6 @@
             [clojurewerkz.quartzite.scheduler :as qs]
             [clojurewerkz.quartzite.jobs :as qj]
             [clojurewerkz.quartzite.triggers :as qt]
-            #_[clojurewerkz.quartzite.date-time :as qdt]
-            [clojurewerkz.quartzite.schedule.simple :as qss]
-            [clojurewerkz.quartzite.schedule.cron :as qsc]
             [clojurewerkz.quartzite.schedule.daily-interval :as qsdi]))
 
 (defn parse-prognosis-data

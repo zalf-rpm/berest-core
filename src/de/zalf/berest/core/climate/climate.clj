@@ -1,17 +1,10 @@
 (ns de.zalf.berest.core.climate.climate
-  (:import (java.util Date))
-  (:require [clojure.java.io :as cjio]
-            [clojure.string :as str]
-            [clj-time.core :as ctc]
-            [clj-time.format :as ctf]
+  (:require [clj-time.core :as ctc]
             [clj-time.coerce :as ctcoe]
-            [de.zalf.berest.core.climate.algo :as algo]
             [de.zalf.berest.core.datomic :as db]
             [de.zalf.berest.core.util :as bu]
             [de.zalf.berest.core.queries :as queries]
-            [datomic.api :as d]
-            [clojure.pprint :as pp])
-  (:import java.util.Date))
+            [datomic.api :as d]))
 
 (defn- before-start+after-end-of-year
   [year]

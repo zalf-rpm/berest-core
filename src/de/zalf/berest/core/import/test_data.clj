@@ -1,10 +1,7 @@
 (ns de.zalf.berest.core.import.test-data
 	(:require [datomic.api :as d]
-            [clj-time.core :as ctc]
             [de.zalf.berest.core.datomic :as db]
-            [de.zalf.berest.core.core :as bc]
-            [de.zalf.berest.core.util :as bu]
-            [de.zalf.berest.core.helper :as bh]))
+            [de.zalf.berest.core.util :as bu]))
 
 ;add 0110/1/0 WR data
 #_(defn add-winter-rye [datomic-connection]

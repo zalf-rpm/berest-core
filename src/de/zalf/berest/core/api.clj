@@ -1,20 +1,8 @@
 (ns de.zalf.berest.core.api
-  (:require [clojure.string :as cs]
-            [datomic.api :as d]
-            [clojure.pprint :as pp]
-            [clojure.edn :as edn]
-            [clojure.tools.logging :as log]
-            [de.zalf.berest.core.core :as bc]
-            #_[de.zalf.berest.core.plot :as plot]
-            [de.zalf.berest.core.datomic :as db]
+  (:require [de.zalf.berest.core.core :as bc]
             [de.zalf.berest.core.util :as bu]
-            [de.zalf.berest.core.helper :as bh :refer [rcomp]]
             [de.zalf.berest.core.climate.climate :as climate]
-            [simple-time.core :as time]
-            [clj-time.core :as ctc]
-            [clj-time.format :as ctf]
-            [clj-time.coerce :as ctcoe]
-            [clojure-csv.core :as csv]))
+            [clj-time.format :as ctf]))
 
 (defn create-csv-output
   [inputs full-reductions-results]

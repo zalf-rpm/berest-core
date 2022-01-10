@@ -1,17 +1,9 @@
 (ns de.zalf.berest.core.core
-  (:require [clojure.math.numeric-tower :as nt]
-            [clojure.java.io :as cjio]
-            clojure.set
+  (:require clojure.set
             [clojure.string :as str]
-            [clojure.pprint :as pp]
-            [clj-time.core :as ctc]
-            [clj-time.format :as ctf]
-            [clj-time.coerce :as ctcoe]
             [de.zalf.berest.core.datomic :as db]
             [de.zalf.berest.core.util :as bu]
-            [clojure-csv.core :as csv]
             [datomic.api :as d]
-            [de.zalf.berest.core.climate.algo :as algo]
             [de.zalf.berest.core.helper :as bh :refer [rcomp ajuxt]]
             [de.zalf.berest.core.data :as data]
             [clojure.algo.generic.functor :as cagf :refer [fmap]]

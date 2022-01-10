@@ -1,18 +1,12 @@
 (ns de.zalf.berest.core.datomic
   (:require clojure.set
-            [clojure.string :as str]
             [crypto.password.scrypt :as pwd]
             #_[buddy.sign.generic :as sign]
-            [clojure.string :as cstr]
-            [clojure.pprint :as pp]
-            [clj-time.core :as ctc]
-            [clj-time.coerce :as ctcoe]
             [clojure.java.io :as cjio]
             [clojure.tools.logging :as log]
             [datomic.api :as d]
             [de.zalf.berest.core.util :as bu]
-            [de.zalf.berest.core.helper :as bh :refer [rcomp]]
-            [clojurewerkz.propertied.properties :as properties]))
+            [de.zalf.berest.core.helper :as bh :refer [rcomp]]))
 
 (def ^:dynamic *db-id* "berest")
 

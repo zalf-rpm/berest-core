@@ -1,6 +1,4 @@
-(ns de.zalf.berest.core.climate.algo
-  (:require [clojure.string :as str]
-            [clojure.pprint :as pp]))
+(ns de.zalf.berest.core.climate.algo)
 
 (defn potential-evaporation-turc-wendling
   [globrad-Jpcm2 tavg & {:keys [fk] :or {fk 1}}]
