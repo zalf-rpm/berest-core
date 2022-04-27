@@ -5,11 +5,17 @@
             [clojure.java.io :as cjio]
             [clojure.tools.logging :as log]
             [datomic.api :as d]
+            #_[datomic.client.api :as d]
             [de.zalf.berest.core.util :as bu]
             [de.zalf.berest.core.helper :as bh :refer [rcomp]]))
 
 (def ^:dynamic *db-id* "berest")
 
+#_(def cfg {:server-type :dev-local
+          :system "weberest"})
+#_(def client (d/client {:server-type :dev-local
+                       :system "datomic-samples"}))
+#_(def client (d/client cfg))
 
 (def partition-namespace #(str *db-id* ".part"))
 
@@ -27,6 +33,7 @@
 (defn datomic-connection-string* [base-uri db-id]
   (str base-uri db-id))
 
+(def dev-local-base-uri "datomic:dev://localhost:4334/")
 #_(def free-local-base-uri "datomic:free://localhost:4334/")
 #_(def free-local-connection-string (partial datomic-connection-string* free-local-base-uri))
 
@@ -34,17 +41,21 @@
 #_(def infinispan-local-connection-string (partial datomic-connection-string* infinispan-local-datomic-base-uri))
 
 #_(def datomic-connection-string #_dynamodb-connection-string free-local-connection-string)
-(def datomic-connection-string (partial datomic-connection-string* (System/getProperty "berest.datomic.url")))
+(def datomic-connection-string (partial datomic-connection-string* dev-local-base-uri #_(System/getProperty "berest.datomic.url")))
 
 (defn connection [& [db-id]]
   (->> (or db-id *db-id*)
        datomic-connection-string
+       (#(do (println "datomic-connection-string: " %) %))
        d/connect))
 
 (defn current-db [& [db-id]]
   (some->> (or db-id *db-id*)
            connection
            d/db))
+
+(defn current-db-test []
+  (d/connect "datomic:dev://localhost:4334/berest"))
 
 (def datomic-schema-files ["private/db/standard-partitions-schema.edn"
                            "private/db/meta-schema.edn"
@@ -417,7 +428,7 @@
          :in $
          :where
          [?e :user/id ?user-id]]
-       (current-db system-db-id) "michael")
+       (current-db) "michael")
 
   (->> (d/q '[:find ?e
               :in $
