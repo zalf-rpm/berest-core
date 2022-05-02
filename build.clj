@@ -1,5 +1,6 @@
 (ns build
-  (:require [clojure.tools.build.api :as b]))
+  (:require [clojure.tools.build.api :as b]
+            [org.corfield.build :as bb]))
 
 (def lib 'de.zalf.berest/berest-core)
 (def version (format "0.3.%s" (b/git-count-revs nil)))
@@ -33,3 +34,8 @@
            :uber-file uber-file
            :basis basis
            :main 'my.lib.main}))
+
+(defn install "Install the JAR locally." [opts]
+  (-> opts
+      (assoc :lib lib :version version)
+      (bb/install)))

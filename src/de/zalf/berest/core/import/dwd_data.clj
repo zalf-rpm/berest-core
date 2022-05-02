@@ -193,6 +193,29 @@
 
   )
 
+(defn import-dwd-data-into-datomic**
+  "import the dwd data under the given url [and filename] into datomic"
+  [kind-identifier data]
+  (try
+    (let [transaction-data (case kind-identifier
+                             "A" (parse-prognosis-data data)
+                             "B" (parse-measured-data data))
+
+          ;_ (println "transaction-data: " (pr-str transaction-data))
+
+          ;insert transaction data via :weather-station/add-data transaction function, to create unique data per station and day
+          transaction-data->add-data (map #(vector :weather-station/add-data %) transaction-data)
+          ;_ (println "transaction-data->add-data: " (pr-str transaction-data->add-data))
+          ]
+      (try
+        @(d/transact (db/connection) transaction-data->add-data)
+        (catch Exception e
+          (println "Exception e: " (pr-str e))
+          (println #_log/info "Couldn't write dwd data to datomic! data: [\n" (pr-str transaction-data->add-data) "\n]")
+          (throw e)))
+      true)
+    (catch Exception _ false)))
+
 (defn import-dwd-data-into-datomic*
   "import the dwd data under the given url [and filename] into datomic"
   ([ftp-url filename]
