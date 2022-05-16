@@ -46,7 +46,7 @@
 (defn connection [& [db-id]]
   (->> (or db-id *db-id*)
        datomic-connection-string
-       (#(do (println "datomic-connection-string: " %) %))
+       #_(#(do (println "datomic-connection-string: " %) %))
        d/connect))
 
 (defn current-db [& [db-id]]
