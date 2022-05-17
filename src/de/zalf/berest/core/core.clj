@@ -1,22 +1,22 @@
 (ns de.zalf.berest.core.core
   (:require clojure.set
-            [clojure.string :as str]
+            #_[clojure.string :as str]
             [de.zalf.berest.core.datomic :as db]
             [de.zalf.berest.core.util :as bu]
             [datomic.api :as d]
             [de.zalf.berest.core.helper :as bh :refer [rcomp ajuxt]]
             [de.zalf.berest.core.data :as data]
             [clojure.algo.generic.functor :as cagf :refer [fmap]]
-            [taoensso.timbre :as timbre :refer [trace debug info warn error fatal spy]]
+            #_[taoensso.timbre :as timbre :refer [trace debug info warn error fatal spy]]
 
             #_[clojure.tools.macro :as ctm]
             #_[clojure.algo.generic.arithmetic :as caga]
             #_[incanter.core :as ic]))
 
-(timbre/set-level! :info)
-(timbre/set-config! [:timestamp-pattern] ""#_"yyyy-MMM-dd HH:mm:ss ZZ")
-(timbre/set-config! [:timestamp-locale] (java.util.Locale/GERMAN))
-(timbre/set-config! [:prefix-fn] (fn [{:keys [level timestamp hostname ns]}]
+#_(timbre/set-level! :info)
+#_(timbre/set-config! [:timestamp-pattern] ""#_"yyyy-MMM-dd HH:mm:ss ZZ")
+#_(timbre/set-config! [:timestamp-locale] (java.util.Locale/GERMAN))
+#_(timbre/set-config! [:prefix-fn] (fn [{:keys [level timestamp hostname ns]}]
                                    (str #_timestamp #_" " #_hostname #_" " (-> level name str/upper-case)
                                         " [" ns "]")))
 

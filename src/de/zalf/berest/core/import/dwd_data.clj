@@ -1,20 +1,20 @@
 (ns de.zalf.berest.core.import.dwd-data
-  (:require [clojure.java.io :as cjio]
+  (:require #_[clojure.java.io :as cjio]
             [clojure.string :as str]
-            [clj-time.core :as ctc]
+            #_[clj-time.core :as ctc]
             [clj-time.format :as ctf]
             [clj-time.coerce :as ctcoe]
-            [clj-time.periodic :as ctp]
+            #_[clj-time.periodic :as ctp]
             [de.zalf.berest.core.datomic :as db]
             [de.zalf.berest.core.util :as bu]
             [datomic.api :as d]
-            [miner.ftp :as ftp]
-            [clojure.tools.logging :as log]
+            #_[miner.ftp :as ftp]
+            #_[clojure.tools.logging :as log]
             [clojure.pprint :as pp]
-            [clojurewerkz.quartzite.scheduler :as qs]
-            [clojurewerkz.quartzite.jobs :as qj]
-            [clojurewerkz.quartzite.triggers :as qt]
-            [clojurewerkz.quartzite.schedule.daily-interval :as qsdi]))
+            #_[clojurewerkz.quartzite.scheduler :as qs]
+            #_[clojurewerkz.quartzite.jobs :as qj]
+            #_[clojurewerkz.quartzite.triggers :as qt]
+            #_[clojurewerkz.quartzite.schedule.daily-interval :as qsdi]))
 
 (defn parse-prognosis-data
   "parse a DWD prognosis data file and return datomic transaction data"
@@ -71,7 +71,7 @@
                               :weather-data/average-temperature (bu/parse-german-double tm)
                               :weather-data/global-radiation (bu/parse-german-double gs)}})))
 
-(comment "instarepl debugging code"
+#_(comment "instarepl debugging code"
 
   (def mdata
     #_(slurp "resources/private/climate/FY60DWLB-20130526_0815.txt")
@@ -177,21 +177,15 @@
 
 (comment "instarepl debug code"
 
-  (make-prognosis-filename (ctc/date-time 2013 6 3))
+  #_(make-prognosis-filename (ctc/date-time 2013 6 3))
 
   ;real ftp seams to be not necessary for just getting data (at least for anonymous access and co)
-  (def t (ftp/with-ftp [client (System/getProperty "import.ftp.dwd.url")]
+  #_(def t (ftp/with-ftp [client (System/getProperty "import.ftp.dwd.url")]
                        (ftp/client-get-stream client (make-prognosis-filename (ctc/date-time 2013 6 3)))))
 
-  (clojure.java.io/reader t)
-
-  )
-
-(comment
-
-  (def files (ftp/list-files (System/getProperty "import.ftp.dwd.url")))
-
-  )
+  #_(clojure.java.io/reader t)
+         
+)
 
 (defn import-dwd-data-into-datomic**
   "import the dwd data under the given url [and filename] into datomic"
@@ -216,7 +210,7 @@
       true)
     (catch Exception _ false)))
 
-(defn import-dwd-data-into-datomic*
+#_(defn import-dwd-data-into-datomic*
   "import the dwd data under the given url [and filename] into datomic"
   ([ftp-url filename]
    (try
@@ -246,7 +240,7 @@
        true)
      (catch Exception _ false))))
 
-(defn import-dwd-data-into-datomic
+#_(defn import-dwd-data-into-datomic
   "import the dwd data at the given dates into datomic"
   [& dates]
   (let [dates* (or dates [(ctc/now)])
@@ -264,13 +258,13 @@
             file-at-date files-at-date]
       (import-dwd-data-into-datomic* (str/replace-first url "anonymous@" "") file-at-date))))
 
-(defn bulk-import-dwd-data-into-datomic
+#_(defn bulk-import-dwd-data-into-datomic
   [from-date to-date]
   (apply import-dwd-data-into-datomic
          (take (ctc/in-days (ctc/interval from-date (ctc/plus to-date (ctc/days 1))))
                (ctp/periodic-seq from-date (ctc/days 1)))))
 
-(comment
+#_(comment
 
   (import-dwd-data-into-datomic (ctc/date-time 2014 2 3))
 
@@ -279,17 +273,17 @@
 
   )
 
-(def scheduler (atom nil))
+#_(def scheduler (atom nil))
 
-(qj/defjob
+#_(qj/defjob
   ImportDWDData
   [ctx]
   (import-dwd-data-into-datomic))
 
-(def dwd-import-job-key "jobs.import-dwd-data")
-(def dwd-import-trigger-key "triggers.import-dwd-data")
+#_(def dwd-import-job-key "jobs.import-dwd-data")
+#_(def dwd-import-trigger-key "triggers.import-dwd-data")
 
-(defn- schedule-dwd-import
+#_(defn- schedule-dwd-import
   [hour min]
   (let [job (qj/build
               (qj/of-type ImportDWDData)
@@ -304,7 +298,7 @@
                                       (qsdi/ending-daily-at (qsdi/time-of-day (inc hour) min 0)))))]
     (qs/schedule @scheduler job trigger)))
 
-(defn start-import-scheduler
+#_(defn start-import-scheduler
   []
   (reset! scheduler (qs/start (qs/initialize)))
   (println "println starting dwd-import-scheduler")
@@ -319,14 +313,14 @@
     (schedule-dwd-import hour min)))
 
 
-(defn stop-import-scheduler
+#_(defn stop-import-scheduler
   []
   (qs/delete-trigger @scheduler (qt/key dwd-import-trigger-key))
   (qs/shutdown @scheduler)
   (println "stopping dwd-import-scheduler")
   (log/info "stopping dwd-import-scheduler"))
 
-(defn set-import-time-settings
+#_(defn set-import-time-settings
   ([hour min] (set-import-time-settings (db/connection) hour min))
   ([db-connection hour min]
    (let [tx-data {:db/id :settings.import.dwd/time #_(db/new-entity-id (db/system-part))
